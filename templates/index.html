@@ -1,0 +1,137 @@
+{% extends 'main.html' %}
+{% load hitcount_tags %}
+{% load static %}
+
+
+
+
+
+
+{% block content %}
+
+
+    <!-- Quick read -->
+    <section class="quick-read section">
+
+        <div class="container">
+
+            <h2 style = "margin-top: 30px" class="title section-title" data-name="Latest Posts">Latest Posts</h2>
+            <!-- Slider main container -->
+            <div class="swiper">
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                    <!-- Slides -->
+
+                    {% for post in posts %}
+        
+                    <a href="{% url 'post:post_detail' post.slug %}" class="article swiper-slide">
+                        <img src="{{ post.image.url }}" alt="" class="article-image">
+
+                        <div class="article-data-container">
+                            <div class="article-data">
+                                <span>{{ post.created_on }}</span>
+                                <span><i class="fa fa-eye" style="font-size:10px"></i>  {% get_hit_count for post %} </span>
+                                <span><i class="fa fa-thumbs-up" style="font-size:10px" aria-hidden="true"></i>  {{ post.like_count }}</span>
+                                <span><i class="fa fa-commenting" style="font-size:10px"></i>   {{ post.number_of_comments }}</span>
+                            </div>
+                            <h3 class="title article-title">{{ post.title }}</h3>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                <!-- Navigation buttons -->
+                <div class="swiper-button-prev swiper-controls"></div>
+                <div class="swiper-button-next swiper-controls"></div>
+                <!-- Pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Older posts -->
+    <section class="older-posts section">
+
+        <div class="container">
+
+            <h2 class="title section-title" data-name="Older posts">Older posts</h2>
+
+            <div class="older-posts-grid-wrapper d-grid">
+                {% for older_post in older_posts %}
+            
+                <a href="{% url 'post:post_detail' older_post.slug %}" class="article d-grid">
+                    <div class="older-posts-article-image-wrapper">
+                        <img src="{{ older_post.image.url }}" alt="" class="article-image">
+                    </div>
+
+                    <div class="article-data-container">
+                        <div class="article-data">
+                            <span>{{ older_post.created_on }}</span>
+                            <span><i class="fa fa-eye" style="font-size:10px"></i>  {% get_hit_count for older_post %} </span> 
+                            <span><i class="fa fa-thumbs-up" style="font-size:10px" aria-hidden="true"></i>  {{ older_post.like_count }}</span>
+                            <span><i class="fa fa-commenting" style="font-size:10px"></i>   {{ older_post.number_of_comments }}</span>
+                        </div>
+                        <h3 class="title article-title">{{ older_post.title }}</h3>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+
+            <div class="see-more-container">
+                <a href="/all-posts" class="btn see-more-btn place-items-center">See more <i class="ri-arrow-right-s-line"></i></i></a>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Popular tags -->
+    <section class="popular-tags section">
+
+        <div class="container">
+
+            <h2 class="title section-title" data-name="Popular tags">Popular tags</h2>
+            
+            <div class="popular-tags-container d-grid">
+                {% for p in popular_posts  %}
+
+                <a href="{% url 'post:post_detail' p.slug %}" class="article">
+                    <span class="tag-name">{{p.title}}</span>
+                    <img src="{{p.image.url}}" alt="" class="article-image">
+                </a>
+                {% endfor %}
+            </div>
+            
+
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter section">
+
+        <div class="container">
+
+            <h2 class="title section-title" data-name="Newsletter">Newsletter</h2>
+
+            <div class="form-container-inner">
+                <h6 class="title newsletter-title">Subscribe to BR Blog</h6>
+                <p class="newsletter-description">With BR Blog you can create your own post and get likes & comments too.</p>
+
+                <form action="" class="form">
+                    <input class="form-input" type="text" placeholder="Enter your email address">
+                    <button class="btn form-btn" type="submit">
+                        <i class="ri-mail-send-line"></i>
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+{% endblock content %}
+
+

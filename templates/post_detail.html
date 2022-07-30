@@ -1,0 +1,154 @@
+{% extends 'main.html' %}
+{% load hitcount_tags %}
+{% load static %}
+
+{% block content %}
+
+    <section class="blog-post section-header-offset">
+        <div class="blog-post-container container">
+            <div class="blog-post-data">
+                <h3 class="title blog-post-title">{{ post.title }}</h3>
+                {% if user == post.author %}
+                <a href="update"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>  Edit</a>
+                {% else %}
+                {% endif %}
+                <div class="article-data">
+                    <span>{{post.created_on}}</span>
+                    <span class="article-data-spacer"></span>
+                    <span>4 Min read</span>
+                </div>
+                <img src="{{ post.image.url }}" height="720px" width="1080px" alt="">
+            </div>
+
+            <div class="container">
+                <p>
+                    {{ post.content }}
+                </p>
+            </div>
+        </div>
+        <!-- LIKES  -->
+                {% if request.user.is_authenticated %}
+                <div class="center">
+                  <span class="" id="like_count"> {{ post.like_count }}</span>
+                  <a> &nbsp | &nbsp </a>
+                  <button class="btn btn-link text-dark p-0 border-0 btn-outline-light" id="like-button" value="{{post.id}}">
+                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                        d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                    </svg>
+                  </button>
+                  <p> &nbsp --- &nbsp <i class="fa fa-eye" style="font-size:24px"></i> &nbsp Views: &nbsp {% get_hit_count for post %}</p>
+                </div> 
+                {% else %}
+            <div class="center">
+                <span class="" id="like_count"> {{ post.like_count }} </span>
+                <a> &nbsp | &nbsp </a>
+                <a href="{% url 'post:login' %}" class="btn btn-link text-dark p-0 border-0 btn-outline-light">
+                  <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                      d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                  </svg>
+                </a>
+                <p> &nbsp --- &nbsp <i class="fa fa-eye" style="font-size:24px"></i> &nbsp Views: &nbsp {% get_hit_count for post %}</p>
+              </div> 
+            {% endif %}
+            
+            <hr>
+        <!-- COMMENTS  -->
+              <br>
+            <h4>Leave your comment!</h4>
+            <div id="comments_section">
+            
+              {% if user.is_authenticated %}
+
+
+              <form  method="POST">
+                {% csrf_token %}
+                <input class="form-input" name="content" type="text" placeholder="Enter your comment .. ">
+                <button class="btn form-btn" type="submit">
+                    Add
+                </button>
+            </form>
+
+                <br>
+              {% else %}
+                <div>
+                    <div>
+              <a class="btn btn-outline-info" href="{% url 'post:login' %}?next={{request.path}}">Log in to add a comment!</a><br>
+                    </div>
+                </div>
+              {% endif %}
+              <br>
+               <div>
+                    <div>
+                        <hr>
+              {% if comments %}
+              <br>
+              <strong class="text-secondary">{{ post.number_of_comments }} Comment{{ post.number_of_comments|pluralize }}</strong>
+                    </div>
+                </div>
+              <ul>
+                {% for comment in comments %}
+                <li>
+                 <div>
+                    <br>
+                    <span>
+                      <strong class="text-info">{{ comment.author }} </strong>
+                      <small class="text-muted">{{ comment.date_posted }}</small>
+                    </span>
+                    <p>
+                      {{ comment.content|safe }}
+                    </p>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              <br>
+                <strong class="text-secondary">No comments yet...</strong>
+                    <br>
+                </div>
+                <br>
+              {% endif %}
+                </div>
+            
+            </div>
+
+            
+            
+    </section>
+
+
+
+
+
+    {% block script %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <script>
+    $(document).on('click', '#like-button', function (e) {
+        e.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '{% url "post:like" %}',
+          data: {
+            postid: $('#like-button').val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'
+          },
+          success: function (json) {
+            document.getElementById("like_count").innerHTML = json['result']
+          },
+          error: function (xhr, errmsg, err) {
+    
+          }
+        });
+      })
+    </script>
+    {% endblock script %}
+    {% endblock content %}
+
+
+    

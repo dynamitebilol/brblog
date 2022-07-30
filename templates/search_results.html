@@ -1,0 +1,41 @@
+{% extends 'main.html' %}
+{% load hitcount_tags %}
+
+{% block content %}
+
+
+    <section class="older-posts section">
+
+        <div class="container">
+
+            <h2 class="title section-title" style = "margin-top: 20px" data-name="Search results">Search results:</h2>
+
+            <div class="older-posts-grid-wrapper d-grid">
+                {% for post in results %}
+            
+                <a href="{% url 'post:post_detail' post.slug %}" class="article d-grid">
+                    <div class="older-posts-article-image-wrapper">
+                        <img src="{{ post.image.url }}" alt="" class="article-image">
+                    </div>
+
+                    <div class="article-data-container">
+
+                        <div class="article-data">
+                            <span>{{ post.created_on }}</span>
+                            <span><i class="fa fa-eye" style="font-size:18px"></i>  {% get_hit_count for post %} </span> 
+                            <span><i class="fa fa-thumbs-up" style="font-size:18px" aria-hidden="true"></i>  {{ post.like_count }}</span>
+                            <span><i class="fa fa-commenting" style="font-size:18px"></i>   {{ post.number_of_comments }}</span>  
+                        </div>
+
+                        <h3 class="title article-title">{{ post.title }}</h3>
+                        <p class="article-description">{{ post.content }}</p>
+
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </section>
+    {% endblock content %}

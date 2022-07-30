@@ -1,0 +1,92 @@
+    <!-- Header -->
+    <header class="header" id="header">
+
+        <nav class="navbar container">
+            <a href="/">
+                <h2 class="logo">BR Blog</h2>
+            </a>
+
+            <div class="menu" id="menu">
+                <ul class="list">
+                    <li class="list-item">
+                        <a href="#" class="list-link current">Home</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="/all-posts" class="list-link">All Posts</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Reviews</a>
+
+                    <li class="list-item">
+                        <a href="https://t.me/dynamitebilol" class="list-link">Contact</a>
+                    </li>
+                    <li class="list-item screen-lg-hidden">
+                        <a href="/create" class="list-link">Create a Post</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="list-item screen-lg-hidden">
+                        <a href="/logout" class="list-link">Log Out</a>
+                    </li>
+
+                    {% else %}
+                    <li class="list-item screen-lg-hidden">
+                        <a href="/login" class="list-link">Log In</a>
+                    </li>
+                    <li class="list-item screen-lg-hidden">
+                        <a href="/signup" class="list-link">Sign up</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+            
+            <div class="list list-right">
+                <a href="/create" class="btn sign-up-btn fancy-border screen-sm-hidden">
+                    <span>Create a Post</span>
+                </a>
+                <button class="btn place-items-center" id="theme-toggle-btn">
+                    <i class="ri-sun-line sun-icon"></i>
+                    <i class="ri-moon-line moon-icon"></i>
+                </button>
+
+                <button class="btn place-items-center" id="search-icon">
+                    <i class="ri-search-line"></i>
+                </button>
+
+                <button class="btn place-items-center screen-lg-hidden menu-toggle-icon" id="menu-toggle-icon">
+                    <i class="ri-menu-3-line open-menu-icon"></i>
+                    <i class="ri-close-line close-menu-icon"></i>
+                </button>
+                 {% if user.is_authenticated %}
+                 <a href="/logout" class="list-link screen-sm-hidden">Log Out</a>
+
+                 {% else %}
+                <a href="/login" class="list-link screen-sm-hidden">Log In</a>
+                <a href="/signup" class="list-link screen-sm-hidden">
+                    <span>Sign up</span>
+                </a>
+                {% endif %}
+         </div>
+
+        </nav>
+
+    </header>
+        <!-- Search -->
+        <div class="search-form-container container" id="search-form-container">
+
+            <div class="form-container-inner">
+    
+                <form action="{% url 'post:search_results' %}" method="GET" class="form">
+                    <input class="form-input" name="title" type="text" placeholder="What are you looking for?">
+                    <button class="btn form-btn" type="submit">
+                        <i class="ri-search-line"></i>
+                    </button>
+                </form>
+                <span class="form-note">Or press ESC to close.</span>
+    
+            </div>
+    
+            <button class="btn form-close-btn place-items-center" id="form-close-btn">
+                <i class="ri-close-line"></i>
+            </button>
+    
+        </div>

@@ -1,0 +1,61 @@
+{% extends 'main.html' %}
+{% load static %}   
+{% load hitcount_tags %}
+{% block link %}<link rel="stylesheet" href="{% static 'assets/css/page.css' %}">{% endblock link %}
+{% block content %}
+<section class="older-posts section">
+
+    <div class="container">
+
+        <h2 class="title section-title" data-name="All posts" style="margin-top:50px">All posts</h2>
+
+        <div class="older-posts-grid-wrapper d-grid">
+            {% for post in posts %}
+        
+            <a href="{% url 'post:post_detail' post.slug %}" class="article d-grid">
+                <div class="older-posts-article-image-wrapper">
+                    <img src="{{ post.image.url }}" alt="" class="article-image">
+                </div>
+
+                <div class="article-data-container">
+                    <div class="article-data">
+                        <span>{{ post.created_on }}</span>
+                        <span><i class="fa fa-eye" style="font-size:10px"></i>  {% get_hit_count for post %} </span> 
+                        <span><i class="fa fa-thumbs-up" style="font-size:10px" aria-hidden="true"></i>  {{ post.like_count }}</span>
+                        <span><i class="fa fa-commenting" style="font-size:10px"></i>   {{ post.number_of_comments }}</span>
+                    </div>
+                    <h3 class="title article-title">{{ post.title }}</h3>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+    
+
+    </div>
+
+</section>
+<section class="pagination">
+    
+    <ul class="pagination__list">
+        {% for i in page_obj.paginator.page_range %}
+        {% if page_obj.number == i %}
+      <li class="pagination__item pagination__item--1">
+        <a href="#" id="pg-button-1" type="button">{{ i }}</a>
+      </li>
+        {% else %}
+        <li class="pagination__item pagination__item--1">
+            <a  href="?page={{ i }}" name='page'id="pg-button-1" type="button">{{ i }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>    
+
+  </section>
+
+
+
+
+  <script  src="{% static 'assets/js/page.js' %}"></script>
+
+{% endblock content %}

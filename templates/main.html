@@ -1,0 +1,57 @@
+{% load static  %} 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BR Blog</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpg" sizes="32x32" href="/media/images/favicon.jpg">
+    <!-- Remix icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Swiper.js styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}"/>
+    {% block link %}{% endblock link %}
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+          }
+    </style>
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    {% if messages %}
+    {% for message in messages %}
+     {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+
+    {% endfor %}
+
+    {% endif %}
+
+{% block content %}
+
+
+{% endblock content %}
+
+{% include 'footer.html' %}
+
+
+    <!-- Swiper.js -->
+    <script src="{% static 'assets/js/swiper-bundle.min.js' %}"></script>
+    
+    <!-- Custom script -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    {% block script %}
+    
+    {% endblock script %}
+</body>
